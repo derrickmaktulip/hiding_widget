@@ -7,16 +7,56 @@
     <title>Booking Page</title>
 </head>
 <body>
-<form action="/test">
-    <p>
+ <form action="/booking.php" method="post">
+<input type="hidden" name="start" value="<?php 
+echo $_POST["start"];
+?>" />
+<input type="hidden" name="end" value="<?php 
+echo $_POST["end"];
+?>" />
+<p>
 <label for="name">Enter your full name</label>
-<input id ="name" type="text" placeholder="Your full name" name="fullname" required>
+<input id ="name" type="text" placeholder="Your full name" name="full_name" required>
 </p>
 <p>
 <label for="email">Enter your email</label>
-<input id="email" type="email" require placeholder="email" name="useremail" required>
+<input id="email" type="email" require placeholder="email" name="user_email" required>
 </p>
 <button>Submit</button>
 </form>
+<?php
+if (isset($_POST["full_name"])){
+    print_r($_POST);
+    $ch_post = curl_init();
+    curl_setopt($ch_post, CURLOPT_URL, 'https://api.timekit.io/v2/bookings');
+    curl_setopt($ch_post, CURLOPT_POST, 1);
+    curl_setopt($ch_post, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch_post, CURLOPT_USERPWD, ":live_api_key_NuvN1bCG3Vv7la7vpPDYaqJDCOrg135g");
+    curl_setopt($ch_post, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+    curl_setopt($ch_post, CURLOPT_HTTPHEADER, array(
+        'Content-Type: application/json',
+    )); 
+    $post_data = [
+        'customer' => [
+            'email' => $_POST['user_email'],
+            'name' => $_POST['full_name'],
+            'timezone' => "America/Toronto"
+        ],
+        'end' => $_POST['end'],
+        'graph' => 'instant',
+        'project_id' => '0c0c704c-ca1c-442f-adeb-5689f529fc0d',
+        'resource_id' => 'a16ecbd1-043e-4ec4-9000-4b1dee660164',
+        'start' => $_POST['start']
+    ];
+    curl_setopt($ch_post, CURLOPT_POSTFIELDS, json_encode($post_data));
+    echo "<br><br><br>";
+    echo json_encode($post_data);
+    echo "<br><br><br>";
+    $response = curl_exec($ch_post);
+    echo($response);
+}
+
+
+?>
 </body>
 </html>

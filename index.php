@@ -5,8 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Demo of Hiding Timekit</title>
+    <link href="index.css" rel="stylesheet">
 </head>
 <body>
+
 <?php
 
 $curl = curl_init();
@@ -14,7 +16,7 @@ $curl = curl_init();
 $post=[
     "project_id"=>"0c0c704c-ca1c-442f-adeb-5689f529fc0d",
     "length"=>"1 hour",
-    "from"=>"now",
+    "from"=>"7 hours",
     "to"=>"1 week",
     "output_timezone"=> "America/Toronto",
     "constraints"=> [
@@ -62,44 +64,118 @@ if ($err) {
         $event_date=substr($booking_event["start"],0,10);
         $timestamp=strtotime($event_date);
         $day = date('D', $timestamp);
+        $dates = array();
         // var_dump($day);
         if ($day==="Mon") {
+            if (in_array(date('j',$timestamp),$dates) != true ){
+              $dates[]=date('j',$timestamp);
+            }
             $monday_booking[] = $booking_event;
         } elseif ($day==="Tue") {
+          if (in_array(date('j',$timestamp),$dates) != true ){
+            $dates[]=date('j',$timestamp);
+          }
             $tuesday_booking[] = $booking_event;
         } elseif ($day==="Wed") {
+          if (in_array(date('j',$timestamp),$dates) != true ){
+            $dates[]=date('j',$timestamp);
+          }
             $wednesday_booking[] = $booking_event;
         } elseif ($day==="Thu") {
+          if (in_array(date('j',$timestamp),$dates) != true ){
+            $dates[]=date('j',$timestamp);
+          }
             $thursday_booking[] = $booking_event;
         } elseif ($day==="Fri") {
+          if (in_array(date('j',$timestamp),$dates) != true ){
+            $dates[]=date('j',$timestamp);
+          };
             $friday_booking[] = $booking_event;
         }
         
     }
 }
-?>
-<div id="weekly_bookings">
-<div class="day_bookings">
-  <?php
-  foreach ($monday_booking as $booking) {
+
+echo "<div id='weekly_bookings'>";
+$first_index=0;
+$index=0;
+$first_date;
+foreach ($dates as $date){
+  if (isset($first_date)!=true){
+    $first_date=$date;
+    $first_index=$index;
+  }
+  if (($date < $first_date and $date + 7 > $first_date) or $date - 7 > $first_date){
+    $first_date=$date;
+    $first_index=$index;
+  }
+  $index++;
+}
+$weekly_bookings = array();
+$weekly_bookings[] = $monday_booking;
+$weekly_bookings[] = $tuesday_booking;
+$weekly_bookings[] = $wednesday_booking;
+$weekly_bookings[] = $thursday_booking;
+$weekly_bookings[] = $friday_booking;
+echo $first_index;
+echo $first_date;
+for ($i=0;$i<5;$i++){
+  echo "<div class='day_bookings'>";
+  if ($first_index+$i > 4 ) {
+    $first_index=0;
+    
+  } else{
+    $first_index++;
+  }
+  foreach ($weekly_bookings[$first_index] as $booking) {
     $start_time = mktime(substr($booking['start'],11,13), substr($booking['start'],14,16), substr($booking['start'],17,19), substr($booking['start'],5,7), substr($booking['start'],8,10), substr($booking['start'],0,4));
     $end_time = mktime(substr($booking['end'],11,13), substr($booking['end'],14,16), substr($booking['end'],17,19), substr($booking['end'],5,7), substr($booking['end'],8,10), substr($booking['end'],0,4));
-    echo "<input type='button' onclick=\"location.href='booking.php?start=".$bookng['start']."'\"  value='".date("M d: h:ia",$start_time)." - ".date("h:ia",$end_time)."'/><br>";
-    // echo "<a class='booking_link'>".date("M d: h:ia",$start_time)." - ".date("h:ia",$end_time)."</a><br>";
+    echo "<form action='booking.php' method='post'>".
+    "<input type='hidden' name='start' value='".$booking["start"]."'/>
+    <input type='hidden' name='end' value='".$booking["end"]."'/>".
+    "<button>".date("M d: h:ia",$start_time)." - ".date("h:ia",$end_time)."</button></form>";
   }
+  echo "</div>";
+}
+echo "</div>";
+
+  // foreach ($tuesday_booking as $booking) {
+  //   $start_time = mktime(substr($booking['start'],11,13), substr($booking['start'],14,16), substr($booking['start'],17,19), substr($booking['start'],5,7), substr($booking['start'],8,10), substr($booking['start'],0,4));
+  //   $end_time = mktime(substr($booking['end'],11,13), substr($booking['end'],14,16), substr($booking['end'],17,19), substr($booking['end'],5,7), substr($booking['end'],8,10), substr($booking['end'],0,4));
+  //   echo "<form action='booking.php' method='post'>".
+  //   "<input type='hidden' name='start' value='".$booking["start"]."'/>
+  //   <input type='hidden' name='end' value='".$booking["end"]."'/>".
+  //   "<button>".date("M d: h:ia",$start_time)." - ".date("h:ia",$end_time)."</button></form>";
+  // }
+  
+  // foreach ($wednesday_booking as $booking) {
+  //   $start_time = mktime(substr($booking['start'],11,13), substr($booking['start'],14,16), substr($booking['start'],17,19), substr($booking['start'],5,7), substr($booking['start'],8,10), substr($booking['start'],0,4));
+  //   $end_time = mktime(substr($booking['end'],11,13), substr($booking['end'],14,16), substr($booking['end'],17,19), substr($booking['end'],5,7), substr($booking['end'],8,10), substr($booking['end'],0,4));
+  //   echo "<form action='booking.php' method='post'>".
+  //   "<input type='hidden' name='start' value='".$booking["start"]."'/>
+  //   <input type='hidden' name='end' value='".$booking["end"]."'/>".
+  //   "<button>".date("M d: h:ia",$start_time)." - ".date("h:ia",$end_time)."</button></form>";
+  // }
+ 
+  // foreach ($thursday_booking as $booking) {
+  //   $start_time = mktime(substr($booking['start'],11,13), substr($booking['start'],14,16), substr($booking['start'],17,19), substr($booking['start'],5,7), substr($booking['start'],8,10), substr($booking['start'],0,4));
+  //   $end_time = mktime(substr($booking['end'],11,13), substr($booking['end'],14,16), substr($booking['end'],17,19), substr($booking['end'],5,7), substr($booking['end'],8,10), substr($booking['end'],0,4));
+  //   echo "
+  //   <form action='booking.php' method='post'>".
+  //   "<input type='hidden' name='start' value='".$booking["start"]."'/>
+  //   <input type='hidden' name='end' value='".$booking["end"]."'/>".
+  //   "<button>".date("M d: h:ia",$start_time)." - ".date("h:ia",$end_time)."</button></form>";
+  // }
+
+  // foreach ($friday_booking as $booking) {
+  //   $start_time = mktime(substr($booking['start'],11,13), substr($booking['start'],14,16), substr($booking['start'],17,19), substr($booking['start'],5,7), substr($booking['start'],8,10), substr($booking['start'],0,4));
+  //   $end_time = mktime(substr($booking['end'],11,13), substr($booking['end'],14,16), substr($booking['end'],17,19), substr($booking['end'],5,7), substr($booking['end'],8,10), substr($booking['end'],0,4));
+  //   echo "<form action='booking.php' method='post'>".
+  //   "<input type='hidden' name='start' value='".$booking["start"]."'/>
+  //   <input type='hidden' name='end' value='".$booking["end"]."'/>".
+  //   "<button>".date("M d: h:ia",$start_time)." - ".date("h:ia",$end_time)."</button></form>";
+  // }
   ?>
-</div>
-<div class="day_bookings">
-
-</div>
-<div class="day_bookings">
-
-</div>
-<div class="day_bookings">
-
-</div>
-<div class="day_bookings">
-
 </div>
 </div>
 </body>

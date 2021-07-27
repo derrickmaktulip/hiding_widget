@@ -1,0 +1,10 @@
+#weekly_bookings {
+display:flex;
+width:100%;
+justify-content: space-around;
+}
+
+.day_bookings button {
+margin-top:15px;
+
+}
