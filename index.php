@@ -49,10 +49,10 @@ $err = curl_error($curl);
 
 curl_close($curl);
 
-
 if ($err) {
   echo "cURL Error #:" . $err;
 } else {
+    $first_day;
     $monday_booking=array();
     $tuesday_booking=array();
     $wednesday_booking=array();
@@ -64,32 +64,19 @@ if ($err) {
         $event_date=substr($booking_event["start"],0,10);
         $timestamp=strtotime($event_date);
         $day = date('D', $timestamp);
+        if (isset($first_day)!=true) {
+          $first_day = $day;
+        }
         $dates = array();
-        // var_dump($day);
         if ($day==="Mon") {
-            if (in_array(date('j',$timestamp),$dates) != true ){
-              $dates[]=date('j',$timestamp);
-            }
             $monday_booking[] = $booking_event;
         } elseif ($day==="Tue") {
-          if (in_array(date('j',$timestamp),$dates) != true ){
-            $dates[]=date('j',$timestamp);
-          }
             $tuesday_booking[] = $booking_event;
         } elseif ($day==="Wed") {
-          if (in_array(date('j',$timestamp),$dates) != true ){
-            $dates[]=date('j',$timestamp);
-          }
             $wednesday_booking[] = $booking_event;
         } elseif ($day==="Thu") {
-          if (in_array(date('j',$timestamp),$dates) != true ){
-            $dates[]=date('j',$timestamp);
-          }
             $thursday_booking[] = $booking_event;
         } elseif ($day==="Fri") {
-          if (in_array(date('j',$timestamp),$dates) != true ){
-            $dates[]=date('j',$timestamp);
-          };
             $friday_booking[] = $booking_event;
         }
         
@@ -97,37 +84,42 @@ if ($err) {
 }
 
 echo "<div id='weekly_bookings'>";
-$first_index=0;
-$index=0;
-$first_date;
-foreach ($dates as $date){
-  if (isset($first_date)!=true){
-    $first_date=$date;
-    $first_index=$index;
-  }
-  if (($date < $first_date and $date + 7 > $first_date) or $date - 7 > $first_date){
-    $first_date=$date;
-    $first_index=$index;
-  }
-  $index++;
-}
 $weekly_bookings = array();
 $weekly_bookings[] = $monday_booking;
 $weekly_bookings[] = $tuesday_booking;
 $weekly_bookings[] = $wednesday_booking;
 $weekly_bookings[] = $thursday_booking;
 $weekly_bookings[] = $friday_booking;
-echo $first_index;
-echo $first_date;
+
+if ($first_day === "Mon") {
+  $index = 0;
+} else if ($first_day === "Tue") {
+  $index = 1;
+} else if ($first_day === "Wed") {
+  $index = 2;
+} else if ($first_day === "Thu") {
+  $index = 3;
+} else {
+  $index = 4;
+}
+
+
 for ($i=0;$i<5;$i++){
   echo "<div class='day_bookings'>";
-  if ($first_index+$i > 4 ) {
-    $first_index=0;
-    
-  } else{
-    $first_index++;
+  if ($index==0){
+    echo "<h2>Monday Bookings</h2>";
+  } elseif ($index==1){
+    echo "<h2>Tuesday Bookings</h2>";
+  } elseif ($index==2){
+    echo "<h2>Wednesday Bookings</h2>";
+  } elseif ($index==3){
+    echo "<h2>Thursday Bookings</h2>";
+  } elseif ($index==4){
+    echo "<h2>Friday Bookings</h2>";
   }
-  foreach ($weekly_bookings[$first_index] as $booking) {
+
+  foreach ($weekly_bookings[$index] as $booking) {
+    
     $start_time = mktime(substr($booking['start'],11,13), substr($booking['start'],14,16), substr($booking['start'],17,19), substr($booking['start'],5,7), substr($booking['start'],8,10), substr($booking['start'],0,4));
     $end_time = mktime(substr($booking['end'],11,13), substr($booking['end'],14,16), substr($booking['end'],17,19), substr($booking['end'],5,7), substr($booking['end'],8,10), substr($booking['end'],0,4));
     echo "<form action='booking.php' method='post'>".
@@ -136,6 +128,10 @@ for ($i=0;$i<5;$i++){
     "<button>".date("M d: h:ia",$start_time)." - ".date("h:ia",$end_time)."</button></form>";
   }
   echo "</div>";
+  $index++;
+  if($index == 5) {
+    $index = 0;
+  }
 }
 echo "</div>";
 
