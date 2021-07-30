@@ -8,6 +8,7 @@
     <link href="index.css" rel="stylesheet">
 </head>
 <body>
+<h1 class="header">Computer Diagnostic Services</h1>
 
 <?php
 
@@ -15,7 +16,7 @@ $curl = curl_init();
 
 $post=[
     "project_id"=>"0c0c704c-ca1c-442f-adeb-5689f529fc0d",
-    "length"=>"1 hour",
+    "length"=>"30 minutes",
     "from"=>"7 hours",
     "to"=>"1 week",
     "output_timezone"=> "America/Toronto",

@@ -2,9 +2,41 @@
 display:flex;
 width:100%;
 justify-content: space-around;
-}
 
+}
+body{
+    background-color: #6DAEDB;
+}
+* {
+margin:0;
+padding:0;
+
+}
 .day_bookings button {
 margin-top:15px;
+padding: 12px 28px;
+border-radius: 8px;
+border: 2px solid black;
+}
 
+.day_bookings button:hover {
+background-color:#999999;
+transition: 0.4s;;
+border: 5px solid black;
+}
+
+.day_bookings {
+    background-color: #6DAEDB;
+    text-align: center;
+}
+
+.header {
+background-color: #1D70A2;
+color: #173753;
+text-align: center;
+font-size: 50px;
+}
+
+h2 {
+color: #1B4353;
 }
