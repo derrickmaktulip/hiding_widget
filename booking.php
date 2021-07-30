@@ -5,8 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking Page</title>
+    <link href="booking.css" rel="stylesheet">
 </head>
 <body>
+<?php echo "You are booking ".date("F d: h:ia",$start_time)." - ".date("h:ia",$end_time);?>
  <form action="/booking.php" method="post">
 <input type="hidden" name="start" value="<?php 
 echo $_POST["start"];
@@ -15,18 +17,17 @@ echo $_POST["start"];
 echo $_POST["end"];
 ?>" />
 <p>
-<label for="name">Enter your full name</label>
-<input id ="name" type="text" placeholder="Your full name" name="full_name" required>
+<label for="name">Enter your full name:</label>
+<input id ="name" type="text" placeholder="Full Name" name="full_name" required>
 </p>
 <p>
-<label for="email">Enter your email</label>
-<input id="email" type="email" require placeholder="email" name="user_email" required>
+<label for="email">Enter your email:</label>
+<input id="email" type="email" require placeholder="Email" name="user_email" required>
 </p>
 <button>Submit</button>
 </form>
 <?php
 if (isset($_POST["full_name"])){
-    print_r($_POST);
     $ch_post = curl_init();
     curl_setopt($ch_post, CURLOPT_URL, 'https://api.timekit.io/v2/bookings');
     curl_setopt($ch_post, CURLOPT_POST, 1);
@@ -49,11 +50,7 @@ if (isset($_POST["full_name"])){
         'start' => $_POST['start']
     ];
     curl_setopt($ch_post, CURLOPT_POSTFIELDS, json_encode($post_data));
-    echo "<br><br><br>";
-    echo json_encode($post_data);
-    echo "<br><br><br>";
     $response = curl_exec($ch_post);
-    echo($response);
 }
 
 
