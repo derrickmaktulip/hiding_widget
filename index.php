@@ -120,9 +120,9 @@ for ($i=0;$i<5;$i++){
   }
 
   foreach ($weekly_bookings[$index] as $booking) {
-print_r($booking);
     $start_time = mktime(substr($booking['start'],11,13), substr($booking['start'],14,16), substr($booking['start'],17,19), substr($booking['start'],5,7), substr($booking['start'],8,10), substr($booking['start'],0,4));
     $end_time = mktime(substr($booking['end'],11,13), substr($booking['end'],14,16), substr($booking['end'],17,19), substr($booking['end'],5,7), substr($booking['end'],8,10), substr($booking['end'],0,4));
+    echo date("M d: h:ia",$start_time);
     echo "<form action='booking.php' method='post'>".
     "<input type='hidden' name='start' value='".$booking["start"]."'/>
     <input type='hidden' name='end' value='".$booking["end"]."'/>".
