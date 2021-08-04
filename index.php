@@ -118,7 +118,7 @@ for ($i=0;$i<5;$i++){
   } elseif ($index==4){
     echo "<h2>Friday Bookings</h2>";
   }
-
+print_r($weekly_bookings);
   foreach ($weekly_bookings[$index] as $booking) {
     
     $start_time = mktime(substr($booking['start'],11,13), substr($booking['start'],14,16), substr($booking['start'],17,19), substr($booking['start'],5,7), substr($booking['start'],8,10), substr($booking['start'],0,4));
