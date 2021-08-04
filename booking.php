@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,25 +9,26 @@
     <link href="booking.css" rel="stylesheet">
 </head>
 <body>
-<?php echo "You are booking ".date("F d: h:ia",$start_time)." - ".date("h:ia",$end_time);?>
- <form action="/booking.php" method="post">
-<input type="hidden" name="start" value="<?php 
-echo $_POST["start"];
-?>" />
-<input type="hidden" name="end" value="<?php 
-echo $_POST["end"];
-?>" />
-<p>
-<label for="name">Enter your full name:</label>
-<input id ="name" type="text" placeholder="Full Name" name="full_name" required>
-</p>
-<p>
-<label for="email">Enter your email:</label>
-<input id="email" type="email" require placeholder="Email" name="user_email" required>
-</p>
-<button>Submit</button>
-</form>
-<?php
+<?php 
+if (!isset($_POST["full_name"])){
+
+
+    $start_time = mktime(substr($_POST['start'],11,13), substr($_POST['start'],14,16), substr($_POST['start'],17,19), substr($_POST['start'],5,7), substr($_POST['start'],8,10), substr($_POST['start'],0,4));
+    $end_time = mktime(substr($_POST['end'],11,13), substr($_POST['end'],14,16), substr($_POST['end'],17,19), substr($_POST['end'],5,7), substr($_POST['end'],8,10), substr($_POST['end'],0,4));
+    echo "You are booking ".date("F d: h:ia",$start_time)." - ".date("h:ia",$end_time);
+    echo "<form action='/booking.php' method='post'>";
+    echo "<input type='hidden' name='start' value='".$_POST["start"]."'>";
+    echo "<input type='hidden' name='end' value='".$_POST["end"]."'>";
+    echo "<p>
+    <label for='name'>Enter your full name:</label>
+    <input id ='name' type='text' placeholder='Full Name' name='full_name' required>
+    </p>
+    <p>
+    <label for='email'>Enter your email:</label>
+    <input id='email' type='email' require placeholder='Email' name='user_email' required>
+    </p>
+    <button>Submit</button>
+    </form>";}
 if (isset($_POST["full_name"])){
     $ch_post = curl_init();
     curl_setopt($ch_post, CURLOPT_URL, 'https://api.timekit.io/v2/bookings');
@@ -51,6 +53,16 @@ if (isset($_POST["full_name"])){
     ];
     curl_setopt($ch_post, CURLOPT_POSTFIELDS, json_encode($post_data));
     $response = curl_exec($ch_post);
+    $err = curl_error($ch_post);
+    $response_json = json_encode($response);
+    if (substr($response_json,4,6) == "errors") {
+        echo "<h2>There seems to be an error, we got the following message:</h2>";
+        echo "<h2>".$response_json."</h2>";
+        echo "<h2>Please call our support line 123-456-7890</h2>";
+    } else {
+        echo "<h2>Your booking has been confirmed</h2>";
+        echo "<meta http-equiv = 'refresh' content = '3; url = index.php' />";
+    }
 }
 
 
