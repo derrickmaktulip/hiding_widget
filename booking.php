@@ -13,8 +13,8 @@
 if (!isset($_POST["full_name"])){
 
 
-    $start_time = mktime(substr($_POST['start'],11,13), substr($_POST['start'],14,16), substr($_POST['start'],17,19), substr($_POST['start'],5,7), substr($_POST['start'],8,10), substr($_POST['start'],0,4));
-    $end_time = mktime(substr($_POST['end'],11,13), substr($_POST['end'],14,16), substr($_POST['end'],17,19), substr($_POST['end'],5,7), substr($_POST['end'],8,10), substr($_POST['end'],0,4));
+    $start_time = mktime((int)substr($_POST['start'],11,13), (int)substr($_POST['start'],14,16), (int)substr($_POST['start'],17,19), (int)substr($_POST['start'],5,7), (int)substr($_POST['start'],8,10), (int)substr($_POST['start'],0,4));
+    $end_time = mktime((int)substr($_POST['end'],11,13), (int)substr($_POST['end'],14,16), (int)substr($_POST['end'],17,19), (int)substr($_POST['end'],5,7), (int)substr($_POST['end'],8,10), (int)substr($_POST['end'],0,4));
     echo "You are booking ".date("F d: h:ia",$start_time)." - ".date("h:ia",$end_time);
     echo "<form action='/booking.php' method='post'>";
     echo "<input type='hidden' name='start' value='".$_POST["start"]."'>";
