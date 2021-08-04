@@ -118,9 +118,9 @@ for ($i=0;$i<5;$i++){
   } elseif ($index==4){
     echo "<h2>Friday Bookings</h2>";
   }
-print_r($weekly_bookings);
+
   foreach ($weekly_bookings[$index] as $booking) {
-    
+print_r($booking);
     $start_time = mktime(substr($booking['start'],11,13), substr($booking['start'],14,16), substr($booking['start'],17,19), substr($booking['start'],5,7), substr($booking['start'],8,10), substr($booking['start'],0,4));
     $end_time = mktime(substr($booking['end'],11,13), substr($booking['end'],14,16), substr($booking['end'],17,19), substr($booking['end'],5,7), substr($booking['end'],8,10), substr($booking['end'],0,4));
     echo "<form action='booking.php' method='post'>".
